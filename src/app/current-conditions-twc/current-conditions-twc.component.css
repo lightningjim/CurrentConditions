@@ -1,0 +1,8 @@
+#main_body
+{
+	font-family: 'Star 4000', Arial, sans-serif;
+	background-color: #21285a;
+	-moz-box-shadow:    inset 0 0 30px #264fad;
+   -webkit-box-shadow: inset 0 0 30px #264fad;
+   box-shadow:         inset 0 0 30px #264fad;
+   }

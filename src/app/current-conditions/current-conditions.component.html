@@ -1,0 +1,35 @@
+<div class="text-white" *ngIf="wxData | async as f">
+	<div class="row">
+		<div class="col-sm-8 display-1">
+			<div><i [class]="weatherIcon(f.currently.icon)"></i> {{ f.currently.summary }}</div>
+			<div><i class="wi wi-thermometer"></i> {{ f.currently.temperature | number:'1.0-0' }} F</div>
+		</div>
+		<div class="col-sm-4 h3">
+			<div *ngIf="f.currently.temperature > f.currently.apparentTemperature">Wind Chill: {{ f.currently.apparentTemperature | number:'1.0-0' }} </div>
+			<div *ngIf="f.currently.temperature < f.currently.apparentTemperature">Heat Index: {{ f.currently.apparentTemperature | number:'1.0-0' }} </div>
+			<i class="wi wi-wind from-{{ f.currently.windBearing }}-deg"></i> {{ f.currently.windSpeed | number:'1.0-0' }} MPH <br/>
+			<div *ngIf="f.currently.windGust >= 10 && f.currently.windGust >= f.currently.windSpeed + 1">G {{ f.currently.windGust | number:'1.0-0' }} MPH</div>
+			<div><i class="wi wi-humidity"></i> {{ f.currently.dewPoint | number:'1.0-0' }} F / {{ f.currently.humidity*100 | number:'1.0-0' }}%</div>
+			<div><i class="wi wi-barometer"></i> {{ f.currently.pressure | number:'1.0-0' }} mb</div>
+		</div>
+	</div>
+	<div class="h1 text-center">
+		Forecast
+	</div>
+	<div class="row">
+		<div *ngFor="let day of f.daily.data" class="col-md-3 col-sm-6 border container">
+			<div><h3 class="text-center"> {{ dateToText(day.time) }}</h3></div>
+			<div><i [class]="weatherIcon(day.icon) + ' mt-4 display-2 text-center w-100'"></i></div>
+			<div class="text-center my-2">{{ day.summary }}</div>
+			<div class="row justify-content-center mx-2 align-text-bottom">
+				<div class="col-xs-6 w-50">H: {{ day.temperatureHigh | number:'1.0-0' }}F</div>
+				<div class="col-xs-6 w-50 text-right">L: {{ day.temperatureLow | number:'1.0-0' }}F</div>
+			</div>
+		</div>
+	</div>
+	<hr class="text-white"/>
+	<button class="btn btn-warning" (click)="getForecast()">Update</button>
+	<div id="d3">
+		<svg></svg>
+	</div>
+</div>

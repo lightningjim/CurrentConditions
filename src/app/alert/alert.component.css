@@ -1,0 +1,11 @@
+#wxalert-box
+{
+	background-color: #233270;
+	font-family: 'Star 4000', Arial, sans-serif;
+	text-shadow: 2px 2px black;
+}
+#wxalert-top
+{
+	font-family: 'Star 4000 Small', Arial, sans-serif;
+	opacity: 1;
+}

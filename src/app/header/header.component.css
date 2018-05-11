@@ -1,0 +1,10 @@
+.navbar-brand
+{
+	font-family: "Star 4000 Extended", Arial, sans-serif;
+}
+
+nav
+{
+	//background: linear-gradient(#c05c02,#1c0a57);
+	background-color: #233270;
+}

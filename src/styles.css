@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+/* body { background: #2e1251; For browsers that do not support gradients
+    background: -webkit-gradient(linear, left top, left bottom, from(#2e1251), to(#c05c02)) fixed; } */
+body { background: #2e1251; }
+
+
+@font-face {
+	font-family: "Star 4000";
+	src: url("assets/fonts/Star4K/Star4000.ttf");
+}
+@font-face {
+	font-family: "Star 4000 Small";
+	src: url("assets/fonts/Star4K/Star4000_Small.ttf");
+}
+@font-face {
+	font-family: "Star 4000 Large";
+	src: url("assets/fonts/Star4K/Star4000_Large.ttf");
+}
+@font-face {
+	font-family: "Star 4000 Extended";
+	src: url("assets/fonts/Star4K/Star4000_Large.ttf");
+}
