@@ -1,15 +1,12 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DarkSkyService } from '../dark-sky.service';
 import { Observable } from 'rxjs';
-// import { do } from 'rxjs/add/operator/do'
-// import * as $ from 'jquery';
-declare var jquery: any;
-declare var $: any;
+
 
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.css']
+  styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent implements OnInit, AfterViewInit {
 	lat: number;
@@ -24,9 +21,6 @@ export class AlertComponent implements OnInit, AfterViewInit {
 		this.getForecast();
 	}
 	ngAfterViewInit() {
-		$('#alert-cc').cycle({speed: 500});
-		$('#alert-cc').cycle('add', "TEST");
-		$('#alert-cc').cycle('reinit');
 	}
 	getForecast(){
 		// this.wxData = this.darksky.currentForecast(this.lat, this.lng).do(data => console.log(data));

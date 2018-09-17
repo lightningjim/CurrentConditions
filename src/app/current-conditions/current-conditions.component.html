@@ -1,4 +1,4 @@
-<div class="text-white" *ngIf="wxData | async as f">
+<div class="text-white" *ngIf="wxData as f">
 	<div class="row">
 		<div class="col-sm-8 display-1">
 			<div><i [class]="weatherIcon(f.currently.icon)"></i> {{ f.currently.summary }}</div>

@@ -1,7 +1,9 @@
 import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
 import { DarkSkyService } from '../dark-sky.service';
 import { Observable } from 'rxjs';
-// import 'rxjs/add/operator/do';
+import { TimerObservable } from "rxjs/observable/TimerObservable";
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/takeWhile';
 import { D3Service, D3, Selection } from 'd3-ng2-service';
 
 @Component({
@@ -39,8 +41,16 @@ export class CurrentConditionsComponent implements OnInit, AfterViewInit {
 
 	getForecast()
 	{
-		this.wxData = this.darksky.currentForecast(this.lat, this.lng);
-		// this.wxData = this.darksky.currentForecast(this.lat, this.lng).do(data => console.log(data));
+		TimerObservable.create(0, 300000)
+                    .takeWhile(() => this.alive)
+                    .subscribe(() => {
+                      this.darksky.currentForecast(this.lat, this.lng)
+                        .subscribe((data) => {
+                          this.wxData = data;
+                          console.log(data);
+                        }
+                      )
+                    });
 	}
 
 	twc_weatherIcon(icon) {
