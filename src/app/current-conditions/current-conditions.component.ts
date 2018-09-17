@@ -1,30 +1,32 @@
-import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DarkSkyService } from '../dark-sky.service';
 import { Observable } from 'rxjs';
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/takeWhile';
-import { D3Service, D3, Selection } from 'd3-ng2-service';
+import { WxDay } from '../wxday.model'
 
 @Component({
 	selector: 'app-current-conditions',
 	templateUrl: './current-conditions.component.html',
 	styleUrls: ['./current-conditions.component.css']
 })
-export class CurrentConditionsComponent implements OnInit, AfterViewInit {
+export class CurrentConditionsComponent implements OnInit {
 
 	lat: number;
 	lng: number;
 	wxData: Observable<any>;
-	private d3: D3;
-	private parentNativeElement: any;
-	d3ParentLement: Selection<any, any, any, any>;
 	private alive: boolean;
 	private interval: number;
 
-	constructor(private darksky: DarkSkyService, d3Service: D3Service, element:ElementRef) { 
-		this.d3 = d3Service.getD3();
-		this.parentNativeElement = element.nativeElement;
+	updated: number;
+	lows: number[][];
+	highs: number[][];
+	forecast: WxDay[];
+
+
+
+	constructor(private darksky: DarkSkyService) { 
 		this.alive = true;
 		this.interval = 300000;
 	}
@@ -35,19 +37,16 @@ export class CurrentConditionsComponent implements OnInit, AfterViewInit {
 		this.getForecast();
 	}
 
-	ngAfterViewInit() {
-	
-	}
-
 	getForecast()
 	{
-		TimerObservable.create(0, 300000)
+		TimerObservable.create(0, this.interval)
                     .takeWhile(() => this.alive)
                     .subscribe(() => {
                       this.darksky.currentForecast(this.lat, this.lng)
                         .subscribe((data) => {
-                          this.wxData = data;
-                          console.log(data);
+                        	this.updated = Date.now();
+                        	this.wxData = data;
+                        	console.log(data);
                         }
                       )
                     });

@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-import { D3Service } from 'd3-ng2-service';
+// import { D3Service } from 'd3-ng2-service';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 import { AppComponent } from './app.component';
@@ -27,7 +27,7 @@ import { CurrentConditionsTwcComponent } from './current-conditions-twc/current-
     HttpClientModule,
     MDBBootstrapModule.forRoot()
   ],
-  providers: [HttpClientModule,DarkSkyService,D3Service],
+  providers: [HttpClientModule,DarkSkyService],
   bootstrap: [AppComponent],
   schemas: [ NO_ERRORS_SCHEMA ]
 })

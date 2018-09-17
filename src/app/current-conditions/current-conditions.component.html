@@ -11,6 +11,7 @@
 			<div *ngIf="f.currently.windGust >= 10 && f.currently.windGust >= f.currently.windSpeed + 1">G {{ f.currently.windGust | number:'1.0-0' }} MPH</div>
 			<div><i class="wi wi-humidity"></i> {{ f.currently.dewPoint | number:'1.0-0' }} F / {{ f.currently.humidity*100 | number:'1.0-0' }}%</div>
 			<div><i class="wi wi-barometer"></i> {{ f.currently.pressure | number:'1.0-0' }} mb</div>
+			<div><i class="wi wi-time-{{ updated | date:'h' }}"></i> {{ updated | date:'h:mm a' }}
 		</div>
 	</div>
 	<div class="h1 text-center">
@@ -28,7 +29,7 @@
 		</div>
 	</div>
 	<hr class="text-white"/>
-	<button class="btn btn-warning" (click)="getForecast()">Update</button>
+	<button class="btn btn-warning" (click)="getForecast()">Manual Update</button>
 	<div id="d3">
 		<svg></svg>
 	</div>
