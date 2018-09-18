@@ -1,23 +1,44 @@
+import { TempArray } from './temparray.model';
 /**
-*apparentTemperature: 71.99
-*cloudCover: 0.05
-*dewPoint: 67.81
-*humidity: 0.9
+*apparentTemperatureHigh: 93.54
+*apparentTemperatureHighTime: 1537221600
+*apparentTemperatureLow: 71.54
+*apparentTemperatureLowTime: 1537268400
+*apparentTemperatureMax: 93.54
+*apparentTemperatureMaxTime: 1537221600
+*apparentTemperatureMin: 71.3
+*apparentTemperatureMinTime: 1537185600
+*cloudCover: 0.07
+*dewPoint: 69.29
+*humidity: 0.73
 *icon: "clear-day"
-nearestStormBearing: 315
-nearestStormDistance: 8
-ozone: 261.61
-precipIntensity: 0
-precipProbability: 0
-*pressure: 1013.76
-*summary: "Clear"
-*temperature: 70.97
-*time: 1537186943
-uvIndex: 0
+*moonPhase: 0.27
+ozone: 260.91
+*precipIntensity: 0.001
+*precipIntensityMax: 0.0065
+*precipIntensityMaxTime: 1537218000
+*precipProbability: 0.1
+*precipType: "rain"
+*pressure: 1013.02
+*summary: "Clear throughout the day."
+sunriseTime: 1537186567
+sunsetTime: 1537230971
+*temperatureHigh: 88.64
+*temperatureHighTime: 1537221600
+*temperatureLow: 70.89
+*temperatureLowTime: 1537268400
+*temperatureMax: 88.64
+*temperatureMaxTime: 1537221600
+*temperatureMin: 70.34
+*temperatureMinTime: 1537185600
+*time: 1537160400
+uvIndex: 9
+uvIndexTime: 1537207200
 *visibility: 10
-windBearing: 183
-windGust: 3.81
-windSpeed: 3.17
+*windBearing: 182
+*windGust: 13.88
+*windGustTime: 1537243200
+*windSpeed: 5.7
 **/
 export class WxDay{
 
@@ -27,19 +48,65 @@ export class WxDay{
 	summary: string;
 	icon: string;
 	//Temperature
-	temp: number;
-	feelsLike: number;
+	temp: TempArray;
+	feelsLike: TempArray;
 	//Humidity
 	rh: number;
 	dewpoint: number;
 	//Wind
 	windDir: number;
 	windSpeed: number;
-	windGust: number;
-	//Other
+	windGust: number[];
+	//Other wx
 	cloudCover: number;
 	visibility: number;
 	pressure: number;
+	//Precip
+	precipType: string;
+	precipIntensity: number[];
+	precipProbability: number;
+	//Almanac
+	moonPhase: number;
+	sunriseTime: number;
+	sunsetTime: number;
+	//Environmental
+	uvIndex: number[];
+	ozone: number;
+
+	constructor(obj?: any){
+		//console.log(obj);
+		this.time = obj.time;
+		this.summary = obj.summary;
+		this.icon = this.weatherIcon(obj.icon);
+		this.temp = new TempArray(
+			[obj.temperatureHigh, obj.temperatureHighTime],
+			[obj.temperatureLow, obj.temperatureLowTime],
+			[obj.temperatureMax, obj.temperatureMaxTime],
+			[obj.temperatureMin, obj.temperatureMinTime]
+			);
+		this.feelsLike = new TempArray(
+			[obj.apparentTemperatureHigh, obj.apparentTemperatureHighTime],
+			[obj.apparentTemperatureLow, obj.apparentTemperatureLowTime],
+			[obj.apparentTemperatureMax, obj.apparentTemperatureMaxTime],
+			[obj.apparentTemperatureMin, obj.apparentTemperatureMinTime]
+			);
+		this.rh = obj.humidity;
+		this.dewpoint = obj.dewPoint;
+		this.windDir = obj.windBearing;
+		this.windSpeed = obj.windSpeed;
+		this.windGust = [obj.windGust, obj.windGustTime];
+		this.cloudCover = obj.cloudCover;
+		this.visibility = obj.visibility;
+		this.pressure = obj.pressure;
+		this.precipType = obj.precipType;
+		this.precipProbability = obj.precipProbability;
+		this.precipIntensity = [obj.precipIntensity, obj.precipIntensityMax, obj.precipIntensityMaxTime];
+		this.moonPhase = obj.moonPhase;
+		this.sunriseTime = obj.sunriseTime;
+		this.sunsetTime = obj.sunsetTime;
+		this.uvIndex = [obj.uvIndex, obj.uvIndexTime];
+		this.ozone = obj.ozone;
+	}
 
 	
 	weatherIcon(icon) {

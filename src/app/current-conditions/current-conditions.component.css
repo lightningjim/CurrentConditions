@@ -6,3 +6,7 @@
    -webkit-box-shadow: inset 0 0 30px #264fad;
    box-shadow:         inset 0 0 30px #264fad;
    }*/
+   .line-chart
+    {
+        border: 1px solid lightgray;
+    }

@@ -18,18 +18,17 @@
 		Forecast
 	</div>
 	<div class="row">
-		<div *ngFor="let day of f.daily.data" class="col-md-3 col-sm-6 border container">
+		<div *ngFor="let day of forecast" class="col-md-3 col-sm-6 border container">
 			<div><h3 class="text-center"> {{ dateToText(day.time) }}</h3></div>
-			<div><i [class]="weatherIcon(day.icon) + ' mt-4 display-2 text-center w-100'"></i></div>
+			<div><i [class]="day.icon + ' mt-4 display-2 text-center w-100'"></i></div>
 			<div class="text-center my-2">{{ day.summary }}</div>
 			<div class="row justify-content-center mx-2 align-text-bottom">
-				<div class="col-xs-6 w-50">H: {{ day.temperatureHigh | number:'1.0-0' }}F</div>
-				<div class="col-xs-6 w-50 text-right">L: {{ day.temperatureLow | number:'1.0-0' }}F</div>
+				<div class="col-xs-6 w-50">H: {{ day.temp.high[0] | number:'1.0-0' }}F</div>
+				<div class="col-xs-6 w-50 text-right">L: {{ day.temp.low[0] | number:'1.0-0' }}F</div>
 			</div>
 		</div>
 	</div>
 	<hr class="text-white"/>
-	<button class="btn btn-warning" (click)="getForecast()">Manual Update</button>
 	<div id="d3">
 		<svg></svg>
 	</div>

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterContentInit  } from '@angular/core';
 import { DarkSkyService } from '../dark-sky.service';
 import { Observable } from 'rxjs';
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/takeWhile';
-import { WxDay } from '../wxday.model'
+import { WxDay } from '../wxday.model';
+import * as d3 from "d3";
 
 @Component({
 	selector: 'app-current-conditions',
@@ -24,8 +25,6 @@ export class CurrentConditionsComponent implements OnInit {
 	highs: number[][];
 	forecast: WxDay[];
 
-
-
 	constructor(private darksky: DarkSkyService) { 
 		this.alive = true;
 		this.interval = 300000;
@@ -34,7 +33,12 @@ export class CurrentConditionsComponent implements OnInit {
 	ngOnInit() {
 		this.lat = 35.443275;
 		this.lng = -97.595879;
+		this.forecast = [];
 		this.getForecast();
+	}
+
+	ngAfterContentInit() {
+		d3.select("svg").style("color", "red");
 	}
 
 	getForecast()
@@ -46,6 +50,21 @@ export class CurrentConditionsComponent implements OnInit {
                         .subscribe((data) => {
                         	this.updated = Date.now();
                         	this.wxData = data;
+                        	this.forecast = [];
+                        	this.lows = [];
+                        	this.highs = [];
+                        	data.daily.data.forEach(
+                        		(newDay) => {
+                        			let tempWxDay = new WxDay(newDay)
+                        			this.forecast.push(tempWxDay);
+                        			this.lows.push(tempWxDay.temp.low);
+                        			this.highs.push(tempWxDay.temp.high);
+                        			//console.log(this.forecast);
+                        			//console.log(this.highs);
+                        		}
+                        	);
+
+                        	this.drawHighLows();
                         	console.log(data);
                         }
                       )
@@ -148,6 +167,11 @@ export class CurrentConditionsComponent implements OnInit {
 			case 6:
 				return 'Sat';
 		}
+	}
+
+	drawHighLows()
+	{
+
 	}
 
 
