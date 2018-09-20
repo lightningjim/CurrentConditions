@@ -10,6 +10,7 @@ import { AlertComponent } from './alert/alert.component';
 import { CurrentConditionsComponent } from './current-conditions/current-conditions.component';
 import { DarkSkyService } from './dark-sky.service';
 import { CurrentConditionsTwcComponent } from './current-conditions-twc/current-conditions-twc.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { CurrentConditionsTwcComponent } from './current-conditions-twc/current-
     BrowserModule,
     HttpModule,
     HttpClientModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    NgbModule
   ],
   providers: [HttpClientModule,DarkSkyService],
   bootstrap: [AppComponent],

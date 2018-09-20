@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, AfterContentInit  } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterContentInit, Renderer2, ViewChild } from '@angular/core';
 import { DarkSkyService } from '../dark-sky.service';
 import { Observable } from 'rxjs';
 import { TimerObservable } from "rxjs/observable/TimerObservable";
@@ -25,6 +25,10 @@ export class CurrentConditionsComponent implements OnInit {
 	highs: number[][];
 	forecast: WxDay[];
 
+	alerts: any[];
+	alertHidden: boolean; //alert
+	@ViewChild('alertText') alertElement: ElementRef;
+
 	constructor(private darksky: DarkSkyService) { 
 		this.alive = true;
 		this.interval = 300000;
@@ -35,6 +39,7 @@ export class CurrentConditionsComponent implements OnInit {
 		this.lng = -97.595879;
 		this.forecast = [];
 		this.getForecast();
+		this.alertHidden = true;
 	}
 
 	ngAfterContentInit() {
@@ -53,6 +58,8 @@ export class CurrentConditionsComponent implements OnInit {
                         	this.forecast = [];
                         	this.lows = [];
                         	this.highs = [];
+                        	this.alerts = data.alerts;
+                        	console.log(this.alerts);
                         	data.daily.data.forEach(
                         		(newDay) => {
                         			let tempWxDay = new WxDay(newDay)
@@ -167,6 +174,18 @@ export class CurrentConditionsComponent implements OnInit {
 			case 6:
 				return 'Sat';
 		}
+	}
+
+	alertShow(alertDesc: string)
+	{
+		this.alertHidden = false;
+		this.alertElement.nativeElement.innerHTML = alertDesc;
+		console.log(this.alertElement);
+	}
+
+	alertHide()
+	{
+		this.alertHidden = true;
 	}
 
 	drawHighLows()

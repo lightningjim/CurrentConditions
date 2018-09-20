@@ -1,4 +1,21 @@
 <div class="text-white" *ngIf="wxData as f">
+	<div *ngIf="alerts" class="row">
+		<div class="col-12">
+			<h1 class="text-center w-100">Weather Alerts <span class="badge red">{{ alerts.length }}</span></h1>
+		</div>
+		<div class="col-md-12 w-100">
+			<ul *ngFor="let alert of alerts" class="nav nav-pills nav-fill">
+				<li class="nav-item">
+					<a class="nav-link h3 text-center" (click)="alertShow(alert.description)">{{ alert.title }}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-12 w-100 purple darken-3 border border-white rounded" [hidden]="alertHidden">
+			<div id="alertText" class="" #alertText></div>
+			<a href="#" id="alert-close warning-text" (click)="alertHide()">Close</a>
+		</div>
+	</div>
+	<br/>
 	<div class="row">
 		<div class="col-sm-8 display-1">
 			<div><i [class]="weatherIcon(f.currently.icon)"></i> {{ f.currently.summary }}</div>
