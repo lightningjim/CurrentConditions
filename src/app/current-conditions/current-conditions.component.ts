@@ -16,6 +16,7 @@ export class CurrentConditionsComponent implements OnInit {
 
 	lat: number;
 	lng: number;
+	latlng: number[];
 	wxData: Observable<any>;
 	private alive: boolean;
 	private interval: number;
@@ -35,10 +36,13 @@ export class CurrentConditionsComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.latlng = this.getLocation();
+		console.log("Outside " + this.latlng);
 		this.lat = 35.443275;
 		this.lng = -97.595879;
 		this.forecast = [];
-		this.getForecast();
+		this.getForecast([this.lat, this.lng]);
+		// this.getForecast(this.getLocation());
 		this.alertHidden = true;
 	}
 
@@ -46,12 +50,31 @@ export class CurrentConditionsComponent implements OnInit {
 		d3.select("svg").style("color", "red");
 	}
 
-	getForecast()
+	getLocation(): number[]
 	{
+		// var source = Rx.DOM.Geolocation.getCurrentPosition();
+	// 	if (navigator.geolocation) {
+	// 		navigator.geolocation.getCurrentPosition(
+	// 			position => {
+	// 				var latlng = [ position.coords.latitude, position.coords.longitude ]; 
+	// 				console.log("From Geo function:" + latlng);
+	// 				return latlng;
+	// 			}
+	// 		);
+	// 	}
+	// 	else
+	// 	{
+	// 		return [ 35.443275, -97.595879 ];
+	// 	}
+	}
+
+	getForecast(latlng: number[])
+	{
+		// console.log("Inside: " + latlng;
 		TimerObservable.create(0, this.interval)
                     .takeWhile(() => this.alive)
                     .subscribe(() => {
-                      this.darksky.currentForecast(this.lat, this.lng)
+                    	this.darksky.currentForecast(latlng)
                         .subscribe((data) => {
                         	this.updated = Date.now();
                         	this.wxData = data;
@@ -59,7 +82,7 @@ export class CurrentConditionsComponent implements OnInit {
                         	this.lows = [];
                         	this.highs = [];
                         	this.alerts = data.alerts;
-                        	console.log(this.alerts);
+                        	// console.log(this.alerts);
                         	data.daily.data.forEach(
                         		(newDay) => {
                         			let tempWxDay = new WxDay(newDay)
@@ -157,7 +180,23 @@ export class CurrentConditionsComponent implements OnInit {
 			return this.dotw(timestampDate.getDay());
 	}
 
-	dotw(dow: number){
+	alertDateToText(timestamp: number){
+		// console.log("Test timestamp " + timestamp);
+		var timestampDate = new Date(timestamp*1000);
+		// console.log(timestampDate - Date.now())
+		if (timestampDate - Date.now() >= 86400000)
+		{			
+			console.log("Greater than 1 day");
+			return this.dotw(timeStampDate.getDay()) + " " + this.timeToString(timestampDate));
+		}
+		else{
+			console.log("Less than one day");
+			return this.timeToString(timestampDate));
+		}
+
+	}
+
+	dotw(dow: number): string{
 		switch (dow){
 			case 0:
 				return 'Sun';
@@ -176,11 +215,41 @@ export class CurrentConditionsComponent implements OnInit {
 		}
 	}
 
+	timeToString(timestamp: Date): string{
+		var ampm, hour, minute;
+		if (timestamp.getHours() == 0)
+		{
+			hour = "12";
+			ampm = "AM";
+		} else if (timestamp.getHours() == 12)
+		{
+			hour = "12";
+			ampm = "PM";
+
+		}
+		else if (timestamp.getHours() > 12)
+		{
+			hour = timestamp.getHours() - 12;
+			ampm = "PM";
+		}
+		else
+		{
+			hour = timestamp.getHours();
+			ampm = "AM";
+
+		}
+
+		if(timestamp.getMinutes() < 10) minute = "0" + timestamp.getMinutes();
+		else minute = timestamp.getMinutes();
+
+		return hour + ":" + minute + " " + ampm;
+	}
+
 	alertShow(alertDesc: string)
 	{
 		this.alertHidden = false;
 		this.alertElement.nativeElement.innerHTML = alertDesc;
-		console.log(this.alertElement);
+		// console.log(this.alertElement);
 	}
 
 	alertHide()

@@ -10,7 +10,9 @@ export class DarkSkyService {
 
   constructor(private http: HttpClient) { }
 
-  currentForecast(lat: number, lng: number): Observable<any> {
+  currentForecast(latlng: number[]): Observable<any> {
+  	var lat = latlng[0];
+  	var lng = latlng[1];
     let params = new HttpParams()
     params = params.set('lat', lat.toString() )
     params = params.set('lng', lng.toString() )

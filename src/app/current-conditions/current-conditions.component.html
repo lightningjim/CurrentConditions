@@ -6,7 +6,9 @@
 		<div class="col-md-12 w-100">
 			<ul *ngFor="let alert of alerts" class="nav nav-pills nav-fill">
 				<li class="nav-item">
-					<a class="nav-link h3 text-center" (click)="alertShow(alert.description)">{{ alert.title }}</a>
+					<a class="nav-link h3 text-center" (click)="alertShow(alert.description)">{{ alert.title }}<br/>
+						<span class="small">until {{ alertDateToText(alert.expires) }}</span>
+					</a>
 				</li>
 			</ul>
 		</div>
