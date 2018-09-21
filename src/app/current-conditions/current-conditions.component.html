@@ -1,18 +1,14 @@
-<div class="text-white" *ngIf="wxData as f">
+<div class="text-white container" *ngIf="wxData as f">
 	<div *ngIf="alerts" class="row">
 		<div class="col-12">
 			<h1 class="text-center w-100">Weather Alerts <span class="badge red">{{ alerts.length }}</span></h1>
 		</div>
-		<div class="col-md-12 w-100">
-			<ul *ngFor="let alert of alerts" class="nav nav-pills nav-fill">
-				<li class="nav-item">
-					<a class="nav-link h3 text-center" (click)="alertShow(alert.description)">{{ alert.title }}<br/>
-						<span class="small">until {{ alertDateToText(alert.expires) }}</span>
-					</a>
-				</li>
-			</ul>
-		</div>
-		<div class="col-md-12 w-100 purple darken-3 border border-white rounded" [hidden]="alertHidden">
+		<nav *ngFor="let alert of alerts" class="nav nav-pills nav-fill text-center">
+			<a class="nav-link h3 text-center nav-item" (click)="alertShow(alert.description)">{{ alert.title }}<br/>
+				<span class="small">until {{ alertDateToText(alert.expires) }}</span>
+			</a>
+		</nav>
+		<div class="w-100 purple darken-3 border border-white rounded" [hidden]="alertHidden">
 			<div id="alertText" class="" #alertText></div>
 			<a href="#" id="alert-close warning-text" (click)="alertHide()">Close</a>
 		</div>
@@ -29,7 +25,7 @@
 			<i class="wi wi-wind from-{{ f.currently.windBearing }}-deg"></i> {{ f.currently.windSpeed | number:'1.0-0' }} MPH <br/>
 			<div *ngIf="f.currently.windGust >= 10 && f.currently.windGust >= f.currently.windSpeed + 1">G {{ f.currently.windGust | number:'1.0-0' }} MPH</div>
 			<div><i class="wi wi-humidity"></i> {{ f.currently.dewPoint | number:'1.0-0' }} F / {{ f.currently.humidity*100 | number:'1.0-0' }}%</div>
-			<div><i class="wi wi-barometer"></i> {{ f.currently.pressure | number:'1.0-0' }} mb</div>
+			<div><i class="wi wi-barometer"></i> {{ f.currently.pressure | number:'1.0-0' }} mb MSL</div>
 			<div><i class="wi wi-time-{{ updated | date:'h' }}"></i> {{ updated | date:'h:mm a' }}
 		</div>
 	</div>

@@ -6,7 +6,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { AlertComponent } from './alert/alert.component';
+// import { AlertComponent } from './alert/alert.component';
 import { CurrentConditionsComponent } from './current-conditions/current-conditions.component';
 import { DarkSkyService } from './dark-sky.service';
 import { CurrentConditionsTwcComponent } from './current-conditions-twc/current-conditions-twc.component';
@@ -17,7 +17,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
   declarations: [
     AppComponent,
     HeaderComponent,
-    AlertComponent,
+    // AlertComponent,
     CurrentConditionsComponent,
     CurrentConditionsTwcComponent
   ],

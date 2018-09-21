@@ -36,8 +36,8 @@ export class CurrentConditionsComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.latlng = this.getLocation();
-		console.log("Outside " + this.latlng);
+		// this.latlng = this.getLocation();
+		// console.log("Outside " + this.latlng);
 		this.lat = 35.443275;
 		this.lng = -97.595879;
 		this.forecast = [];
@@ -50,23 +50,23 @@ export class CurrentConditionsComponent implements OnInit {
 		d3.select("svg").style("color", "red");
 	}
 
-	getLocation(): number[]
-	{
-		// var source = Rx.DOM.Geolocation.getCurrentPosition();
-	// 	if (navigator.geolocation) {
-	// 		navigator.geolocation.getCurrentPosition(
-	// 			position => {
-	// 				var latlng = [ position.coords.latitude, position.coords.longitude ]; 
-	// 				console.log("From Geo function:" + latlng);
-	// 				return latlng;
-	// 			}
-	// 		);
-	// 	}
-	// 	else
-	// 	{
-	// 		return [ 35.443275, -97.595879 ];
-	// 	}
-	}
+	// getLocation(): //number[]
+	// {
+	// 	// var source = Rx.DOM.Geolocation.getCurrentPosition();
+	// // 	if (navigator.geolocation) {
+	// // 		navigator.geolocation.getCurrentPosition(
+	// // 			position => {
+	// // 				var latlng = [ position.coords.latitude, position.coords.longitude ]; 
+	// // 				console.log("From Geo function:" + latlng);
+	// // 				return latlng;
+	// // 			}
+	// // 		);
+	// // 	}
+	// // 	else
+	// // 	{
+	// // 		return [ 35.443275, -97.595879 ];
+	// // 	}
+	// }
 
 	getForecast(latlng: number[])
 	{
@@ -82,7 +82,7 @@ export class CurrentConditionsComponent implements OnInit {
                         	this.lows = [];
                         	this.highs = [];
                         	this.alerts = data.alerts;
-                        	// console.log(this.alerts);
+                        	console.log(this.alerts);
                         	data.daily.data.forEach(
                         		(newDay) => {
                         			let tempWxDay = new WxDay(newDay)
@@ -184,14 +184,14 @@ export class CurrentConditionsComponent implements OnInit {
 		// console.log("Test timestamp " + timestamp);
 		var timestampDate = new Date(timestamp*1000);
 		// console.log(timestampDate - Date.now())
-		if (timestampDate - Date.now() >= 86400000)
+		if (timestampDate.getTime() - Date.now() >= 86400000)
 		{			
-			console.log("Greater than 1 day");
-			return this.dotw(timeStampDate.getDay()) + " " + this.timeToString(timestampDate));
+			// console.log("Greater than 1 day");
+			return this.dotw(timestampDate.getDay()) + " " + this.timeToString(timestampDate);
 		}
 		else{
-			console.log("Less than one day");
-			return this.timeToString(timestampDate));
+			// console.log("Less than one day");
+			return this.timeToString(timestampDate);
 		}
 
 	}
@@ -247,7 +247,7 @@ export class CurrentConditionsComponent implements OnInit {
 
 	alertShow(alertDesc: string)
 	{
-		this.alertHidden = false;
+		this.alertHidden = !(this.alertHidden);
 		this.alertElement.nativeElement.innerHTML = alertDesc;
 		// console.log(this.alertElement);
 	}
