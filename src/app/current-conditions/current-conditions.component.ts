@@ -5,7 +5,7 @@ import { TimerObservable } from "rxjs/observable/TimerObservable";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/takeWhile';
 import { WxDay } from '../wxday.model';
-import * as d3 from "d3";
+// import * as d3 from "d3";
 
 @Component({
 	selector: 'app-current-conditions',
@@ -47,7 +47,7 @@ export class CurrentConditionsComponent implements OnInit {
 	}
 
 	ngAfterContentInit() {
-		d3.select("svg").style("color", "red");
+		// d3.select("svg").style("color", "red");
 	}
 
 	// getLocation(): //number[]
