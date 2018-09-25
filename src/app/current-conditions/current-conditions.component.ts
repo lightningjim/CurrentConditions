@@ -5,6 +5,7 @@ import { TimerObservable } from "rxjs/observable/TimerObservable";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/takeWhile';
 import { WxDay } from '../wxday.model';
+import { GeolocationService } from '../geolocation.service';
 // import * as d3 from "d3";
 
 @Component({
@@ -20,6 +21,7 @@ export class CurrentConditionsComponent implements OnInit {
 	wxData: Observable<any>;
 	private alive: boolean;
 	private interval: number;
+	position: Observable<Position>;
 
 	updated: number;
 	lows: number[][];
@@ -30,18 +32,24 @@ export class CurrentConditionsComponent implements OnInit {
 	alertHidden: boolean; //alert
 	@ViewChild('alertText') alertElement: ElementRef;
 
-	constructor(private darksky: DarkSkyService) { 
+
+    // Warning flag & message.
+    warning: boolean;
+    message: string;
+
+	constructor(private darksky: DarkSkyService, private geolocation: GeolocationService) { 
 		this.alive = true;
 		this.interval = 300000;
 	}
 
 	ngOnInit() {
+		this.getCurrentPosition();
 		// this.latlng = this.getLocation();
 		// console.log("Outside " + this.latlng);
-		this.lat = 35.443275;
-		this.lng = -97.595879;
-		this.forecast = [];
-		this.getForecast([this.lat, this.lng]);
+		// this.lat = 35.443275;
+		// this.lng = -97.595879;
+		// this.forecast = [];
+		// this.getForecast([this.lat, this.lng]);
 		// this.getForecast(this.getLocation());
 		this.alertHidden = true;
 	}
@@ -82,7 +90,7 @@ export class CurrentConditionsComponent implements OnInit {
                         	this.lows = [];
                         	this.highs = [];
                         	this.alerts = data.alerts;
-                        	console.log(this.alerts);
+                        	// console.log(this.alerts);
                         	data.daily.data.forEach(
                         		(newDay) => {
                         			let tempWxDay = new WxDay(newDay)
@@ -261,6 +269,40 @@ export class CurrentConditionsComponent implements OnInit {
 	{
 
 	}
+	getCurrentPosition(): void {
+        this.warning = false;
+        this.message = "";
+
+        if (navigator.geolocation) {
+            this.geolocation.getCurrentPosition().subscribe(
+                (position: Position) => {
+                    this.latlng = [ position.coords.latitude, position.coords.longitude ];
+                    // console.log(this.latlng);
+                    this.getForecast(this.latlng);
+                },
+                (error: PositionError) => {
+                    if (error.code > 0) {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                this.message = 'permission denied';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                this.message = 'position unavailable';
+                                break;
+                            case error.TIMEOUT:
+                                this.message = 'position timeout';
+                                break;
+                        }
+                        this.warning = true;
+                    }
+                },
+                () => console.log('Geolocation service: completed.'));
+
+        } else {
+            this.message = "browser doesn't support geolocation";
+            this.warning = true;
+        }
+    }
 
 
 }

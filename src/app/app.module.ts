@@ -11,6 +11,7 @@ import { CurrentConditionsComponent } from './current-conditions/current-conditi
 import { DarkSkyService } from './dark-sky.service';
 import { CurrentConditionsTwcComponent } from './current-conditions-twc/current-conditions-twc.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { GeolocationService } from './geolocation.service';
 
 
 @NgModule({
@@ -28,7 +29,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     MDBBootstrapModule.forRoot(),
     NgbModule
   ],
-  providers: [HttpClientModule,DarkSkyService],
+  providers: [HttpClientModule,DarkSkyService, GeolocationService],
   bootstrap: [AppComponent],
   schemas: [ NO_ERRORS_SCHEMA ]
 })
