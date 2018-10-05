@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<div id="temp-trend"></div>
+<script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+<style type="text/css">
+/* 13. Basic Styling with CSS */
+/* Style the lines by removing the fill and applying a stroke */
+.low {
+    fill: none;
+    stroke: blue;
+    stroke-width: 3;
+}
+.high {
+    fill: none;
+    stroke: red;
+    stroke-width: 3;
+}
+/* Style the dots by assigning a fill and stroke */
+.dot-low {
+    fill: #ffab00;
+    stroke: #fff;
+}
+.dot-high {
+    fill: #ffab00;
+    stroke: #fff;
+}
+</style>
+<script>
+
+var parseTime = d3.timeParse("%Q");
+var data = 
+{'highs':
+  {
+    0: {temp: 87.33, time: 1537909200},
+    1: {temp: 60.15, time: 1537984800},
+    2: {temp: 70.94, time: 1538082000},
+    3: {temp: 75.88, time: 1538172000},
+    4: {temp: 78.01, time: 1538254800},
+    5: {temp: 81.36, time: 1538341200},
+    6: {temp: 82.46, time: 1538427600},
+    7: {temp: 82.19, time: 1538510400}
+  },
+'lows':
+  {
+    0: {temp: 55.67, time: 1537966800},
+    1: {temp: 48.44, time: 1538049600},
+    2: {temp: 57.61, time: 1538139600},
+    3: {temp: 59.88, time: 1538222400},
+    4: {temp: 64.86, time: 1538308800},
+    5: {temp: 69.47, time: 1538391600},
+    6: {temp: 70.79, time: 1538478000},
+    7: {temp: 70.93, time: 1538568000}
+  }
+};
+
+function parseData(data){
+
+  var arr = {'highs': [], 'lows': []};
+  for (var i in data.highs)
+  {
+      arr.highs.push(
+      {
+        time: +data.highs[i].time,
+        // time: parseTime(data.lows[i].time),
+        temp: +data.highs[i].temp
+      });
+  }
+  for (var i in data.lows)
+  {
+      arr.lows.push(
+      {
+        time: +data.lows[i].time,
+        // time: parseTime(data.lows[i].time),
+        temp: +data.lows[i].temp
+      });
+  }
+  return arr;
+}
+
+var times = [1537966800, 1537909200, 1538049600, 1537984800, 1538139600, 1538082000, 1538222400, 1538172000, 1538308800, 1538254800, 1538391600, 1538341200, 1538478000, 1538427600, 1538568000, 1538510400];
+
+var temps = [87.33, 60.15, 70.94, 75.88, 78.01, 81.36, 82.46, 82.19, 55.67, 48.44, 57.61, 59.88, 64.86, 69.47, 70.79, 70.93];
+
+// console.log("Time range: " + d3.min(times) + " - " + d3.max(times));
+// console.log("Temp range: " + d3.min(temps) + " - " + d3.max(temps));
+
+
+var margin = {top: 50, right: 50, bottom: 50, left: 50};
+var width = 960 - margin.left - margin.right;
+var height = 500 - margin.top - margin.bottom;
+var graph = d3.select('#temp-trend').append("svg:svg").attr("width", width+margin.left+margin.right).attr("height", height+margin.top+margin.right);
+graph.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+// console.log(svg);
+
+// Generate axis scales, time parser, and line definition.
+var xScale = d3.scaleTime()
+               .domain(d3.extent(times)).nice()
+               .rangeRound([0, width]);
+var yScale = d3.scaleLinear()
+               .domain(d3.extent(temps))
+               .nice()
+               .rangeRound([height, 0]);
+
+var line = d3.line()
+            .x(function(d){ 
+              console.log("X: " + d.time);
+              return xScale(d.time)
+            })
+            .y(function(d){ 
+              console.log("Y: " + d.temp);
+              return yScale(d.temp)
+            });
+var data_parsed = parseData(data);
+graph.append("g")
+     .attr("class", "x axis")
+     .attr("transform", "translate(20, " + height + ")")
+     .call(d3.axisBottom(xScale));
+graph.append("g")
+     .attr("class", "y axis")
+     .attr("transform", "translate(" + 20 + ", 10)")
+     .call(d3.axisLeft(yScale));
+console.log(data_parsed.lows);
+console.log(data_parsed.highs);
+graph.append("path")
+     .datum(data_parsed.lows)
+     .attr("class", "low")
+     .attr("d", line); 
+graph.selectAll(".dot-low")
+    .data(data_parsed.lows)
+  .enter().append("circle") // Uses the enter().append() method
+    .attr("class", "dot-low") // Assign a class for styling
+    .attr("cx", function(d) { return xScale(d.time) })
+    .attr("cy", function(d) { return yScale(d.temp) })
+    .attr("r", 5);
+graph.append("path")
+     .datum(data_parsed.highs)
+     .attr("class", "high")
+     .attr("d", line);
+graph.selectAll(".dot-high")
+    .data(data_parsed.highs)
+  .enter().append("circle") // Uses the enter().append() method
+    .attr("class", "dot-high") // Assign a class for styling
+    .attr("cx", function(d) { return xScale(d.time) })
+    .attr("cy", function(d) { return yScale(d.temp) })
+    .attr("r", 5);
+</script>
