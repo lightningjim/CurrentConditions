@@ -6,7 +6,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/takeWhile';
 import { WxDay } from '../wxday.model';
 import { GeolocationService } from '../geolocation.service';
-// import * as d3 from "d3";
+import * as d3 from "d3";
 
 @Component({
 	selector: 'app-current-conditions',
@@ -31,6 +31,7 @@ export class CurrentConditionsComponent implements OnInit {
 	alerts: any[];
 	alertHidden: boolean; //alert
 	@ViewChild('alertText') alertElement: ElementRef;
+	@ViewChild('highlows') highlowEl: ElementRef;
 
 
     // Warning flag & message.
@@ -55,7 +56,6 @@ export class CurrentConditionsComponent implements OnInit {
 	}
 
 	ngAfterContentInit() {
-		// d3.select("svg").style("color", "red");
 	}
 
 	// getLocation(): //number[]
@@ -90,6 +90,7 @@ export class CurrentConditionsComponent implements OnInit {
                         	this.lows = [];
                         	this.highs = [];
                         	this.alerts = data.alerts;
+							console.log("High Low: " + this.highlowEl);
                         	// console.log(this.alerts);
                         	data.daily.data.forEach(
                         		(newDay) => {
@@ -267,7 +268,7 @@ export class CurrentConditionsComponent implements OnInit {
 
 	drawHighLows()
 	{
-
+		// d3.select(this.highlowEl.nativeElement).append("svg:svg");
 	}
 	getCurrentPosition(): void {
         this.warning = false;

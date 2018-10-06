@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <div id="temp-trend"></div>
-<script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v5.js"></script>
 <style type="text/css">
-/* 13. Basic Styling with CSS */
-/* Style the lines by removing the fill and applying a stroke */
 .low {
     fill: none;
     stroke: blue;
@@ -15,19 +13,17 @@
     stroke: red;
     stroke-width: 3;
 }
-/* Style the dots by assigning a fill and stroke */
 .dot-low {
-    fill: #ffab00;
+    fill: blue;
     stroke: #fff;
 }
 .dot-high {
-    fill: #ffab00;
+    fill: red;
     stroke: #fff;
 }
 </style>
 <script>
 
-var parseTime = d3.timeParse("%Q");
 var data = 
 {'highs':
   {
@@ -55,13 +51,15 @@ var data =
 
 function parseData(data){
 
+  var parseTime = d3.timeParse("%s");
   var arr = {'highs': [], 'lows': []};
   for (var i in data.highs)
   {
+      // console.log("Date: " + parseTime(data.highs[i].time));
       arr.highs.push(
       {
-        time: +data.highs[i].time,
-        // time: parseTime(data.lows[i].time),
+        // time: +data.highs[i].time,
+        time: parseTime(data.lows[i].time),
         temp: +data.highs[i].temp
       });
   }
@@ -69,20 +67,28 @@ function parseData(data){
   {
       arr.lows.push(
       {
-        time: +data.lows[i].time,
-        // time: parseTime(data.lows[i].time),
+        // time: +data.lows[i].time,
+        time: parseTime(data.lows[i].time),
         temp: +data.lows[i].temp
       });
   }
   return arr;
 }
 
+var parseTime = d3.timeParse("%s");
+var times_parsed = [];
+// var temps = [];
 var times = [1537966800, 1537909200, 1538049600, 1537984800, 1538139600, 1538082000, 1538222400, 1538172000, 1538308800, 1538254800, 1538391600, 1538341200, 1538478000, 1538427600, 1538568000, 1538510400];
-
+for (x in times)
+{
+  var parseTime=d3.timeParse("%s");
+  times_parsed.push(parseTime(times[x]));
+}
+console.log(times_parsed);
 var temps = [87.33, 60.15, 70.94, 75.88, 78.01, 81.36, 82.46, 82.19, 55.67, 48.44, 57.61, 59.88, 64.86, 69.47, 70.79, 70.93];
 
-// console.log("Time range: " + d3.min(times) + " - " + d3.max(times));
-// console.log("Temp range: " + d3.min(temps) + " - " + d3.max(temps));
+console.log("Time range: " + d3.min(times_parsed) + " - " + d3.max(times_parsed));
+console.log("Temp range: " + d3.min(temps) + " - " + d3.max(temps));
 
 
 var margin = {top: 50, right: 50, bottom: 50, left: 50};
@@ -94,7 +100,7 @@ graph.append("g").attr("transform", "translate(" + margin.left + "," + margin.to
 
 // Generate axis scales, time parser, and line definition.
 var xScale = d3.scaleTime()
-               .domain(d3.extent(times)).nice()
+               .domain(d3.extent(times_parsed))
                .rangeRound([0, width]);
 var yScale = d3.scaleLinear()
                .domain(d3.extent(temps))
@@ -111,13 +117,14 @@ var line = d3.line()
               return yScale(d.temp)
             });
 var data_parsed = parseData(data);
+console.log(d3.extent(times));
 graph.append("g")
      .attr("class", "x axis")
-     .attr("transform", "translate(20, " + height + ")")
-     .call(d3.axisBottom(xScale));
+     .attr("transform", "translate(0, " + height + ")")
+     .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%a, %b %e")));
 graph.append("g")
      .attr("class", "y axis")
-     .attr("transform", "translate(" + 20 + ", 10)")
+     .attr("transform", "translate(" + width +", 0)")
      .call(d3.axisLeft(yScale));
 console.log(data_parsed.lows);
 console.log(data_parsed.highs);
